@@ -1,0 +1,29 @@
+{% extends 'kbm_core/base.html' %}
+
+{% block title %}Beranda{% endblock %}
+
+{% block content %}
+    <h1>Selamat datang di Aplikasi Pengelolaan KBM !</h1>
+    <p>dibangun berbasis Django</p>
+    <p>Waktu saat ini: {{ current_time }}</p>
+{% endblock %}
+
+<!--
+
++++++ SCRIPT SEBELUM INHERITANCE +++++
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda</title>
+</head>
+<body>
+    <h1>Selamat datang di Aplikasi Pengelolaan KBM</h1>
+    <p>Ini adalah halaman yang dimuat dari template.</p>
+    <p>Waktu saat ini: {{ current_time }}</p>
+</body>
+</html> -->
+
+<!--SCRIPT SESUDAH MENGGUNAKAN TEMPLATES INHERITANCE-->

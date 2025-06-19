@@ -1,0 +1,53 @@
+{# kbm_app/kbm_core/templates/kbm_core/daftar_kelas.html #}
+{% extends 'kbm_core/base.html' %}
+
+{% block title %}Daftar Kelas{% endblock %}
+
+{% block content %}
+    <h2>Daftar Kelas</h2>
+
+    <p><a href="{% url 'tambah_kelas' %}" style="background-color: #4CAF50; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block; margin-bottom: 20px;">Tambah Kelas Baru</a></p>
+
+    {% if kelas_list %}
+        <table border="1" style="width:100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color:#f2f2f2;">
+                    <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Nama Kelas</th>
+                    <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Tingkat</th>
+                    <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Wali Kelas</th>
+                    <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for kelas in kelas_list %}
+                <tr>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">
+                        {# NAMA KELAS SEKARANG JADI LINK KE HALAMAN DETAIL #}
+                        <a href="{% url 'detail_kelas' id_kelas=kelas.idkelas %}" style="color: #007bff; text-decoration: none;">
+                            {{ kelas.namakelas }}
+                        </a>
+                    </td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{ kelas.tingkat }}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">
+                        {% if kelas.guru_idguru %}
+                            {{ kelas.guru_idguru }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">
+                        <a href="{% url 'edit_kelas' id_kelas=kelas.idkelas %}" style="color: #007bff; text-decoration: none; margin-right: 10px;">Edit</a>
+
+                        <form action="{% url 'hapus_kelas' id_kelas=kelas.idkelas %}" method="get" style="display:inline;">
+                            {% csrf_token %} 
+                            <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Tidak ada data kelas yang tersedia.</p>
+    {% endif %}
+{% endblock %}

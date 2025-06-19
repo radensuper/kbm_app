@@ -1,0 +1,35 @@
+{# kbm_app/kbm_core/templates/kbm_core/detail_kelas.html #}
+{% extends 'kbm_core/base.html' %}
+
+{% block title %}{{ judul_halaman }}{% endblock %}
+
+{% block content %}
+    <h2 class="mb-4">{{ judul_halaman }}</h2>
+
+    {# Gunakan list-group atau tabel dengan gaya Bootstrap #}
+    <ul class="list-group list-group-flush"> {# list tanpa border atas/bawah #}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <strong>Kode Kelas:</strong> <span>{{ kelas.idkelas }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <strong>Kelas:</strong> <span>{{ kelas.namakelas }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <strong>Tingkat/Jenjang:</strong> <span>{{ kelas.tingkat }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <strong>Jurusan/Program:</strong> <span>{% if kelas.jurusan %}{{ kelas.jurusan }}{% else %}-{% endif %}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <strong>Wali Kelas:</strong> <span>{% if kelas.guru_idguru %}{{ kelas.guru_idguru.nama_lengkap }}{% else %}-{% endif %}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <strong>Tahun Pelajaran:</strong> <span>{% if kelas.tahunajaran_idtahunajaran %}{{ kelas.tahunajaran_idtahunajaran }}{% else %}-{% endif %}</span>
+        </li>
+    </ul>
+
+    <p class="mt-4"> {# margin-top #}
+        <a href="{% url 'edit_kelas' id_kelas=kelas.idkelas %}" class="btn btn-primary me-2">Edit Kelas</a> {# Tombol biru, margin-right #}
+        <a href="{% url 'daftar_kelas' %}" class="btn btn-secondary">Kembali</a> {# Tombol abu-abu #}
+    </p>
+{% endblock %}

@@ -1,0 +1,37 @@
+{# kbm_app/kbm_core/templates/kbm_core/tambah_kelas.html #}
+{% extends 'kbm_core/base.html' %}
+{% load static %}
+
+{% block title %}{{ judul_halaman }}{% endblock %}
+
+{% block content %}
+    <h2 class="mb-4">{{ judul_halaman }}</h2> {# mb-4 untuk margin-bottom #}
+
+    <form method="post">
+        {% csrf_token %} 
+
+        {# Render form fields dengan gaya Bootstrap #}
+        {% for field in form %}
+            <div class="mb-3"> {# margin-bottom untuk setiap field #}
+                {{ field.label_tag }} {# Label dari field #}
+                {{ field }} {# Input field itu sendiri #}
+                {% if field.help_text %}
+                    <div class="form-text">{{ field.help_text }}</div> {# Teks bantuan field #}
+                {% endif %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger mt-1">{{ error }}</div> {# Pesan error field #}
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        {# Pesan error non-field (misalnya error dari form itu sendiri) #}
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary mt-3 me-2">Simpan Kelas</button> {# Tombol biru, margin-top dan margin-end #}
+        <a href="{% url 'daftar_kelas' %}" class="btn btn-secondary mt-3">Kembali</a> {# Tombol abu-abu #}
+    </form>
+{% endblock %}

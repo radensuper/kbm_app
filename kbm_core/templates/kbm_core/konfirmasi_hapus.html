@@ -1,0 +1,18 @@
+{# kbm_app/kbm_core/templates/kbm_core/konfirmasi_hapus.html #}
+{% extends 'kbm_core/base.html' %}
+{% load static %}
+
+{% block title %}Konfirmasi Hapus{% endblock %}
+
+{% block content %}
+    <h2>Konfirmasi Penghapusan</h2>
+    <p>Anda yakin ingin menghapus <b>{{ object_to_delete }}?</b></p>
+    <p style="color: red;">Tindakan ini tidak dapat dibatalkan.</p>
+
+    <form action="{{ delete_url }}" method="post" style="display:inline-block; margin-right: 10px;">
+        {% csrf_token %}
+        <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Ya, Hapus</button>
+    </form>
+
+    <a href="{{ cancel_url }}" style="background-color: #6c757d; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block;">Batal</a>
+{% endblock %}
