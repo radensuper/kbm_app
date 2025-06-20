@@ -1,0 +1,24 @@
+# Python bytecode files
+*.pyc
+__pycache__/
+
+# Virtual environment directories
+.env
+/env/
+venv/
+/kbm_env/
+
+# Database files (for SQLite, adjust if using others)
+db.sqlite3
+db.mySql
+
+# Media and static files uploaded/collected by Django
+/media/
+/static_files/
+
+# IDE specific files (e.g., VS Code)
+.vscode/
+
+# Operating System generated files
+.DS_Store # macOS
+Thumbs.db # Windows
