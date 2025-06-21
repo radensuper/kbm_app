@@ -192,3 +192,150 @@ footer {
         padding: 30px;
     }
 }
+
+/* === STYLING BARU UNTUK LAYOUT DASHBOARD === */
+
+:root {
+    --primary-color: #28b485; /* Hijau utama */
+    --secondary-color: #20c997; /* Tosca/Teal */
+    --sidebar-bg: #2c3e50; /* Biru gelap untuk sidebar */
+    --sidebar-text: #ecf0f1; /* Putih keabuan untuk teks sidebar */
+    --sidebar-active-bg: #34495e; /* Latar belakang item menu aktif */
+    --content-bg: #f4f7f6; /* Latar belakang area konten */
+    --text-color: #333;
+    --card-bg: #ffffff;
+    --shadow-color: rgba(0,0,0,0.1);
+}
+
+/* Menghapus margin default body */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--content-bg);
+}
+
+.app-wrapper {
+    display: flex;
+}
+
+/* Sidebar (Menu Kiri) */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-header {
+    padding: 20px;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    border-bottom: 1px solid #4a627a;
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    flex-grow: 1; /* Membuat nav mengisi ruang yang tersedia */
+}
+
+.sidebar-nav li a {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+.sidebar-nav li a i { /* Styling untuk Ikon */
+    margin-right: 15px;
+    font-size: 1.2em;
+}
+
+.sidebar-nav li a:hover {
+    background-color: var(--sidebar-active-bg);
+}
+
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid #4a627a;
+    text-align: center;
+}
+
+.sidebar-footer .btn-logout {
+    background: none;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 8px 15px;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
+}
+.sidebar-footer .btn-logout:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Main Content Area (Konten Kanan) */
+.main-content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    transition: margin-left 0.3s ease-in-out;
+    padding: 0;
+}
+
+.main-content header.top-header {
+    background-color: var(--card-bg);
+    padding: 15px 30px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    display: flex;
+    align-items: center;
+}
+
+/* Hamburger Menu Icon untuk Mobile */
+.menu-toggle {
+    display: none; /* Sembunyikan di desktop */
+    font-size: 1.5em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.content-wrapper {
+    padding: 30px;
+}
+
+footer.main-footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #888;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 992px) {
+    .sidebar {
+        transform: translateX(-100%); /* Sembunyikan sidebar di luar layar */
+        z-index: 1000;
+    }
+    .sidebar.active {
+        transform: translateX(0); /* Tampilkan sidebar saat aktif */
+    }
+    .main-content {
+        width: 100%;
+        margin-left: 0;
+    }
+    .menu-toggle {
+        display: block; /* Tampilkan tombol hamburger di mobile */
+    }
+}
