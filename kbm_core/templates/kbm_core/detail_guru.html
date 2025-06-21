@@ -1,0 +1,38 @@
+{% extends 'kbm_core/base.html' %}
+
+{% block title %}Detail Guru{% endblock %}
+{% block page_title %}Detail: {{ guru.nama_lengkap }}{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-light">
+        <h5 class="mb-0">Profil Guru</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3 text-center">
+                {% if guru.foto %}
+                    <img src="{{ guru.foto.url }}" alt="Foto {{ guru.nama_lengkap }}" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                {% else %}
+                    <i class="bi bi-person-circle" style="font-size: 150px; color: #ccc;"></i>
+                {% endif %}
+            </div>
+            <div class="col-md-9">
+                <h3>{{ guru.nama_lengkap }}</h3>
+                <p class="text-muted">{{ guru.status }}</p>
+                <hr>
+                <p><strong>NIP / NUPTK:</strong> {{ guru.nip|default:"-" }} / {{ guru.nuptk|default:"-" }}</p>
+                <p><strong>Instansi:</strong> {{ guru.nama_instansi }}</p>
+                <p><strong>Alamat Instansi:</strong> {{ guru.alamat|default:"-" }}</p>
+                <p><strong>Username:</strong> {{ guru.username }}</p>
+                <!-- <p><strong>Password:</strong> {{ guru.password }}</p> -->
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-end">
+        <a href="{% url 'edit_guru' id_guru=guru.idguru %}" class="btn btn-primary">Edit Profil</a>
+        <a href="{% url 'daftar_guru' %}" class="btn btn-secondary">Kembali</a>
+    </div>
+</div>
+{% endblock %}
+

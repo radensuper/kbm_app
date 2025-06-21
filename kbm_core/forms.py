@@ -55,3 +55,39 @@ class KelasForm(forms.ModelForm):
         self.fields['guru_idguru'].empty_label = "--- Pilih Wali Kelas ---"
         self.fields['guru_idguru'].required = False
         self.fields['tahunajaran_idtahunajaran'].empty_label = "--- Pilih Tahun Pelajaran ---"
+
+# UNTUK FORM EDIT/TAMBAH GURU
+
+class GuruForm(forms.ModelForm):
+    class Meta:
+        model = Guru
+        # Tentukan semua field dari model Guru yang ingin Anda sertakan di form
+        # Kita sengaja tidak menyertakan 'pwd' karena manajemen password sebaiknya ditangani terpisah
+        fields = [
+            'nama_lengkap', 'nip', 'nuptk', 'status', 'username', 
+            'foto', 'nama_instansi', 'alamat'
+        ]
+
+        # Berikan label yang lebih mudah dibaca untuk setiap field
+        labels = {
+            'nama_lengkap': 'Nama Lengkap',
+            'nip': 'NIP',
+            'nuptk': 'NUPTK',
+            'status': 'Status Kepegawaian',
+            'username': 'Username',
+            'foto': 'Upload Foto Profil',
+            'nama_instansi': 'Nama Instansi (isikan nama resmi di Laporan/RPP/LCK)',
+            'alamat': 'Alamat Instansi'
+        }
+
+        # Terapkan kelas Bootstrap ke setiap field menggunakan widgets
+        widgets = {
+            'nama_lengkap': forms.TextInput(attrs={'class': 'form-control'}),
+            'nip': forms.TextInput(attrs={'class': 'form-control'}),
+            'nuptk': forms.TextInput(attrs={'class': 'form-control'}),
+            'status': forms.TextInput(attrs={'class': 'form-control'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'foto': forms.FileInput(attrs={'class': 'form-control'}), # Widget untuk upload file
+            'nama_instansi': forms.TextInput(attrs={'class': 'form-control'}),
+            'alamat': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}), # Textarea untuk alamat
+        }

@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse # Tambahkan 'reverse' untuk mendapatkan URL by name
 from datetime import datetime
 from .models import Kelas, Riwayatkelaspd, Guru, Tahunajaran
-from .forms import KelasForm
+from .forms import KelasForm, GuruForm
 from django.contrib.auth.decorators import login_required
 
 @login_required
@@ -111,3 +111,74 @@ def detail_kelas(request, id_kelas):
     #    'judul_halaman': f'Detail Kelas: {kelas.namakelas}' # Judul halaman dinamis
     #}
     #return render(request, 'kbm_core/detail_kelas.html', context) # Menggunakan template baru
+
+    # ==== VIEWS UNTUK MANAJEMEN GURU ====
+
+@login_required
+def daftar_guru(request):
+    guru_list = Guru.objects.all()
+    context = {
+        'guru_list': guru_list
+    }
+    return render(request, 'kbm_core/daftar_guru.html', context)
+
+@login_required
+def detail_guru(request, id_guru):
+    guru = get_object_or_404(Guru, idguru=id_guru)
+    context = {
+        'guru': guru
+    }
+    return render(request, 'kbm_core/detail_guru.html', context)
+
+# C:\app\kbm_app\kbm_core\views.py
+
+@login_required
+def tambah_guru(request):
+    if request.method == 'POST':
+        # 'request.FILES' penting untuk menangani upload file
+        form = GuruForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save() # Menyimpan data baru, termasuk foto
+            # messages.success(request, 'Data guru berhasil ditambahkan!') # Opsional: untuk notifikasi
+            return redirect('daftar_guru')
+    else:
+        form = GuruForm() # Tampilkan form kosong
+
+    context = {
+        'form': form,
+        'judul_halaman': 'Tambah Guru Baru'
+    }
+    return render(request, 'kbm_core/form_guru.html', context)
+
+@login_required
+def edit_guru(request, id_guru):
+    guru = get_object_or_404(Guru, idguru=id_guru)
+    if request.method == 'POST':
+        # 'instance=guru' untuk memberitahu form bahwa kita sedang mengedit data yang sudah ada
+        form = GuruForm(request.POST, request.FILES, instance=guru)
+        if form.is_valid():
+            form.save() # Memperbarui data yang ada
+            # messages.success(request, 'Data guru berhasil diperbarui!') # Opsional
+            return redirect('daftar_guru')
+    else:
+        form = GuruForm(instance=guru) # Tampilkan form dengan data yang sudah ada
+
+    context = {
+        'form': form,
+        'judul_halaman': f'Edit Data Guru: {guru.nama_lengkap}'
+    }
+    return render(request, 'kbm_core/form_guru.html', context)
+
+@login_required
+def hapus_guru(request, id_guru):
+    guru = get_object_or_404(Guru, idguru=id_guru)
+    if request.method == 'POST':
+        guru.delete()
+        return redirect('daftar_guru')
+    
+    context = {
+        'object_to_delete': guru,
+        'delete_url': reverse('hapus_guru', kwargs={'id_guru': guru.idguru}),
+        'cancel_url': reverse('daftar_guru')
+    }
+    return render(request, 'kbm_core/konfirmasi_hapus.html', context)

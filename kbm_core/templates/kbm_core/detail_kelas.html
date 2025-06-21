@@ -15,7 +15,7 @@
                 <li class="list-group-item d-flex justify-content-between"><strong>Tingkat:</strong> <span>{{ kelas.tingkat }}</span></li>
                 <li class="list-group-item d-flex justify-content-between"><strong>Jurusan:</strong> <span>{{ kelas.jurusan|default:"-" }}</span></li>
                 <li class="list-group-item d-flex justify-content-between"><strong>Wali Kelas:</strong> <span>{{ kelas.guru_idguru|default:"-" }}</span></li>
-                <li class="list-group-item d-flex justify-content-between"><strong>Tahun Ajaran:</strong> <span>{{ kelas.tahunajaran_idtahunajaran|default:"-" }}</span></li>
+                <li class="list-group-item d-flex justify-content-between"><strong>Tahun Pelajaran:</strong> <span>{{ kelas.tahunajaran_idtahunajaran|default:"-" }}</span></li>
             </ul>
              <div class="card-footer text-center">
                 <a href="{% url 'edit_kelas' id_kelas=kelas.idkelas %}" class="btn btn-primary me-2">Edit Kelas</a>

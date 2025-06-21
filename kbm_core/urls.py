@@ -11,6 +11,11 @@ urlpatterns = [
     path('kelas/<int:id_kelas>/edit/', views.edit_kelas, name='edit_kelas'),
     path('kelas/<int:id_kelas>/hapus/', views.hapus_kelas, name='hapus_kelas'),
     path('kelas/<int:id_kelas>/', views.detail_kelas, name='detail_kelas'), # TAMBAHKAN BARIS INI
+    path('guru/', views.daftar_guru, name='daftar_guru'),
+    path('guru/tambah/', views.tambah_guru, name='tambah_guru'),
+    path('guru/<int:id_guru>/', views.detail_guru, name='detail_guru'),
+    path('guru/<int:id_guru>/edit/', views.edit_guru, name='edit_guru'),
+    path('guru/<int:id_guru>/hapus/', views.hapus_guru, name='hapus_guru'),
     path('login/', LoginView.as_view(template_name='kbm_core/login.html'), name='login'),
     path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
 ]

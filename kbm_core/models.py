@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from PIL import Image # <--- Import Pillow
 
 # Definisi Choices untuk Tingkat
 TINGKAT_CHOICES = [
@@ -203,8 +204,10 @@ class Guru(models.Model):
     status = models.CharField(max_length=50)
     username = models.CharField(unique=True, max_length=150)
     pwd = models.CharField(max_length=255)
-    foto = models.CharField(max_length=255, blank=True, null=True)
-
+    foto = models.ImageField(upload_to='guru_photos/', blank=True, null=True)
+    nama_instansi = models.CharField(max_length=255, default='')
+    alamat = models.TextField(blank=True, null=True) # TextField cocok untuk alamat yang panjang
+    
     class Meta:
         managed = False
         db_table = 'guru'
@@ -212,6 +215,23 @@ class Guru(models.Model):
     # TAMBAHKAN ATAU PASTIKAN METODE __str__ INI ADA
     def __str__(self):
         return self.nama_lengkap # Akan menampilkan Nama Lengkap Guru di dropdown
+    
+     # --- TAMBAHKAN METODE SAVE KUSTOM INI utk upload foto ---
+    def save(self, *args, **kwargs):
+        # Pertama, jalankan proses save standar
+        super().save(*args, **kwargs)
+
+        # Jika ada file foto yang diunggah
+        if self.foto:
+            img = Image.open(self.foto.path)
+
+            # Tentukan ukuran maksimum (misal: 800x800 pixels)
+            output_size = (800, 800)
+
+            # Ubah ukuran gambar jika lebih besar dari ukuran maksimum
+            if img.height > output_size[0] or img.width > output_size[1]:
+                img.thumbnail(output_size)
+                img.save(self.foto.path, quality=85, optimize=True) # Simpan kembali dengan kualitas 85%
 
 
 class GuruHasMatapelajaran(models.Model):

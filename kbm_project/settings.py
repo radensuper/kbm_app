@@ -147,3 +147,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Pengaturan Autentikasi
 LOGIN_REDIRECT_URL = 'about' # URL untuk mengarahkan pengguna setelah berhasil login
 LOGIN_URL = 'login' # URL untuk halaman login Anda (nama URL, bukan path)
+
+# utk fitur upload foto
+
+import os
+
+# URL untuk mengakses media files dari browser
+MEDIA_URL = '/media/'
+
+# Path absolut di sistem file tempat media files akan disimpan
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
