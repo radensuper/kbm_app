@@ -39,6 +39,7 @@
                                     <th>Nama Lengkap</th>
                                     <th>NIS</th>
                                     <th>NISN</th>
+                                    <th>L/P</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -48,6 +49,7 @@
                                         <td>{{ pd.namalengkappd }}</td>
                                         <td>{{ pd.nis|default:"-" }}</td>
                                         <td>{{ pd.nisn|default:"-" }}</td>
+                                        <td>{{ pd.gender|default:"-" }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -55,7 +57,7 @@
                     </div>
                 {% else %}
                     <div class="alert alert-info text-center">
-                        Belum ada peserta didik di kelas ini untuk tahun ajaran aktif.
+                        Belum ada peserta didik di kelas ini untuk tahun pelajaran aktif.
                     </div>
                 {% endif %}
             </div>
