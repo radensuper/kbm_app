@@ -330,6 +330,14 @@ class Matapelajaran(models.Model):
 
 
 class Pesertadidik(models.Model):
+    # --- DEFINISIKAN PILIHAN UNTUK JENIS SISWA DI SINI ---
+    JENIS_SISWA_CHOICES = [
+        ('Reguler', 'Reguler'),
+        ('VIP/Khusus', 'VIP/Khusus'),
+        ('Beasiswa Penuh', 'Beasiswa Penuh'),
+        ('Beasiswa Temporer', 'Beasiswa Temporer'),
+    ]
+    
     idpesertadidik = models.AutoField(db_column='idpesertaDidik', primary_key=True)  # Field name made lowercase.
     namalengkappd = models.CharField(db_column='namaLengkapPD', max_length=255)  # Field name made lowercase.
     nis = models.CharField(db_column='NIS', unique=True, max_length=20, blank=True, null=True)  # Field name made lowercase.
@@ -337,10 +345,21 @@ class Pesertadidik(models.Model):
     gender = models.CharField(max_length=15)
     tgllahir = models.DateField(db_column='tglLahir', blank=True, null=True)  # Field name made lowercase.
 
+    # --- TAMBAHKAN FIELD BARU DI SINI ---
+    jenis_siswa = models.CharField(
+        max_length=50,
+        choices=JENIS_SISWA_CHOICES,
+        default='Reguler'
+    )
+
+    is_berkebutuhan_khusus = models.BooleanField(default=False)
+
     class Meta:
         managed = False
         db_table = 'pesertadidik'
 
+    def __str__(self):
+        return self.namalengkappd
 
 class Riwayatkelaspd(models.Model):
     idriwayatkelaspd = models.AutoField(db_column='idriwayatKelasPD', primary_key=True)  # Field name made lowercase.

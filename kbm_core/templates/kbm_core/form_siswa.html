@@ -1,0 +1,47 @@
+{% extends 'kbm_core/base.html' %}
+{% block title %}{{ judul_halaman }}{% endblock %}
+{% block page_title %}{{ judul_halaman }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <form method="post">
+                <div class="card-header bg-light"><h5 class="mb-0">{{ judul_halaman }}</h5></div>
+                <div class="card-body">
+                    {% csrf_token %}
+                    {% for field in form %}
+                     {# Tangani checkbox secara khusus untuk styling yang benar #}
+                    {% if field.name == 'is_berkebutuhan_khusus' %}
+                     <div class="mb-3 form-check">
+                        {{ field }}
+                        <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                     </div>
+                    {% else %}
+                     {# Render field lain seperti biasa #}
+                     <div class="mb-3">
+                         <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                         {{ field }}
+                     </div>
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                    {% endfor %}
+                    {# Pesan error non-field #}
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger mt-3">
+                        {% for error in form.non_field_errors %}
+                        <p class="mb-0">{{ error }}</p>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-end">
+                    <a href="{% url 'daftar_siswa' %}" class="btn btn-secondary me-2">Batal</a>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

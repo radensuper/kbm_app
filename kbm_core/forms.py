@@ -1,7 +1,7 @@
 # C:\app\kbm_app\kbm_core\forms.py
 
 from django import forms
-from .models import Kelas, Guru, Tahunajaran
+from .models import Kelas, Guru, Tahunajaran, Pesertadidik
 
 class KelasForm(forms.ModelForm):
     class Meta:
@@ -91,3 +91,45 @@ class GuruForm(forms.ModelForm):
             'nama_instansi': forms.TextInput(attrs={'class': 'form-control'}),
             'alamat': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}), # Textarea untuk alamat
         }
+
+ # ==== FORM UNTUK SISWA (PESERTA DIDIK) ====
+ 
+class SiswaForm(forms.ModelForm):
+    # Definisikan pilihan untuk field gender
+    GENDER_CHOICES = [
+        ('Laki-laki', 'Laki-laki'),
+        ('Perempuan', 'Perempuan'),
+    ]
+
+    # Override field gender untuk menggunakan pilihan di atas
+    gender = forms.ChoiceField(choices=GENDER_CHOICES, widget=forms.Select(attrs={'class': 'form-select'}))
+
+    # Override field tanggal lahir untuk menggunakan input tipe date
+    tgllahir = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        label='Tanggal Lahir'
+    )
+
+    class Meta:
+        model = Pesertadidik
+        # 1. Tambahkan 'jenis_siswa' ke dalam daftar fields
+        fields = ['namalengkappd', 'nis', 'nisn', 'gender', 'tgllahir', 'jenis_siswa', 'is_berkebutuhan_khusus']
+
+        labels = {
+            'namalengkappd': 'Nama Lengkap Peserta Didik',
+            'nis': 'NIS (Nomor Induk Siswa)',
+            'nisn': 'NISN (Nomor Induk Siswa Nasional)',
+            # 2. Tambahkan label untuk field baru
+            'jenis_siswa': 'Jenis Siswa',
+            # 2. Tambahkan label untuk field checkbox
+            'is_berkebutuhan_khusus': 'Berkebutuhan Khusus?',
+        }
+        widgets = {
+            'namalengkappd': forms.TextInput(attrs={'class': 'form-control'}),
+            'nis': forms.TextInput(attrs={'class': 'form-control'}),
+            'nisn': forms.TextInput(attrs={'class': 'form-control'}),
+            # 3. Tambahkan widget agar tampilannya bagus (dropdown)
+            'jenis_siswa': forms.Select(attrs={'class': 'form-select'}),
+            # 3. Tambahkan widget agar checkbox sesuai gaya Bootstrap
+            'is_berkebutuhan_khusus': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }       

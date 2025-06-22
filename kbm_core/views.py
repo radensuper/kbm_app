@@ -2,8 +2,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse # Tambahkan 'reverse' untuk mendapatkan URL by name
 from datetime import datetime
-from .models import Kelas, Riwayatkelaspd, Guru, Tahunajaran
-from .forms import KelasForm, GuruForm
+from .models import Kelas, Riwayatkelaspd, Guru, Tahunajaran, Pesertadidik
+from .forms import KelasForm, GuruForm, SiswaForm
 from django.contrib.auth.decorators import login_required
 
 @login_required
@@ -114,11 +114,35 @@ def detail_kelas(request, id_kelas):
 
     # ==== VIEWS UNTUK MANAJEMEN GURU ====
 
+# fungsi daftar guru ada nomor urut dan bisa di sort
+
 @login_required
 def daftar_guru(request):
-    guru_list = Guru.objects.all()
+    # Ambil parameter sorting dari URL, jika tidak ada, gunakan default
+    sort_by = request.GET.get('sort', 'nama_lengkap') # Default sort by nama_lengkap
+    direction = request.GET.get('direction', 'asc')   # Default direction ascending
+
+    # Whitelist untuk keamanan: hanya field ini yang boleh di-sort
+    allowed_sort_fields = ['nama_lengkap', 'nama_instansi']
+    if sort_by not in allowed_sort_fields:
+        sort_by = 'nama_lengkap' # Kembali ke default jika field tidak diizinkan
+
+    # Tentukan arah pengurutan
+    if direction == 'desc':
+        order_by_field = f'-{sort_by}'
+        next_direction = 'asc'
+    else:
+        order_by_field = sort_by
+        next_direction = 'desc'
+
+    # Ambil data dari database dan urutkan
+    guru_list = Guru.objects.all().order_by(order_by_field)
+
     context = {
-        'guru_list': guru_list
+        'guru_list': guru_list,
+        'sort_by': sort_by,
+        'direction': direction,
+        'next_direction': next_direction
     }
     return render(request, 'kbm_core/daftar_guru.html', context)
 
@@ -180,5 +204,81 @@ def hapus_guru(request, id_guru):
         'object_to_delete': guru,
         'delete_url': reverse('hapus_guru', kwargs={'id_guru': guru.idguru}),
         'cancel_url': reverse('daftar_guru')
+    }
+    return render(request, 'kbm_core/konfirmasi_hapus.html', context)
+
+# ==== VIEWS UNTUK MANAJEMEN SISWA ====
+
+@login_required
+def daftar_siswa(request):
+    sort_by = request.GET.get('sort', 'namalengkappd')
+    direction = request.GET.get('direction', 'asc')
+
+    allowed_sort_fields = ['namalengkappd', 'nis', 'nisn']
+    if sort_by not in allowed_sort_fields:
+        sort_by = 'namalengkappd'
+
+    order_by_field = f'-{sort_by}' if direction == 'desc' else sort_by
+    siswa_list = Pesertadidik.objects.all().order_by(order_by_field)
+
+    context = {
+        'siswa_list': siswa_list,
+        'sort_by': sort_by,
+        'direction': direction,
+    }
+    return render(request, 'kbm_core/daftar_siswa.html', context)
+
+@login_required
+def detail_siswa(request, id_siswa):
+    siswa = get_object_or_404(Pesertadidik, idpesertadidik=id_siswa)
+    # Ambil data riwayat kelas untuk siswa ini
+    riwayat_kelas = Riwayatkelaspd.objects.filter(pesertadidik_idpesertadidik=siswa).order_by('-tahunajaran_idtahunajaran')
+    context = {
+        'siswa': siswa,
+        'riwayat_kelas': riwayat_kelas
+    }
+    return render(request, 'kbm_core/detail_siswa.html', context)
+
+@login_required
+def tambah_siswa(request):
+    if request.method == 'POST':
+        form = SiswaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('daftar_siswa')
+    else:
+        form = SiswaForm()
+    context = {
+        'form': form,
+        'judul_halaman': 'Tambah Siswa Baru'
+    }
+    return render(request, 'kbm_core/form_siswa.html', context)
+
+@login_required
+def edit_siswa(request, id_siswa):
+    siswa = get_object_or_404(Pesertadidik, idpesertadidik=id_siswa)
+    if request.method == 'POST':
+        form = SiswaForm(request.POST, instance=siswa)
+        if form.is_valid():
+            form.save()
+            return redirect('daftar_siswa')
+    else:
+        form = SiswaForm(instance=siswa)
+    context = {
+        'form': form,
+        'judul_halaman': f'Edit Data Siswa: {siswa.namalengkappd}'
+    }
+    return render(request, 'kbm_core/form_siswa.html', context)
+
+@login_required
+def hapus_siswa(request, id_siswa):
+    siswa = get_object_or_404(Pesertadidik, idpesertadidik=id_siswa)
+    if request.method == 'POST':
+        siswa.delete()
+        return redirect('daftar_siswa')
+    context = {
+        'object_to_delete': siswa,
+        'delete_url': reverse('hapus_siswa', kwargs={'id_siswa': siswa.idpesertadidik}),
+        'cancel_url': reverse('daftar_siswa')
     }
     return render(request, 'kbm_core/konfirmasi_hapus.html', context)
