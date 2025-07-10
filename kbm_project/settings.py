@@ -116,6 +116,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# menggunakan custom user
+AUTH_USER_MODEL = 'kbm_core.AppUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
